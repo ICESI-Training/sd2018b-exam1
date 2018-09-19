@@ -1,1 +1,9 @@
-# sd2018b-exam1
+# Exam 1
+
+**Name**: Luis Alejandro Tróchez  
+**Student ID**: A00054648
+
+## Answers
+
+1.  
+
