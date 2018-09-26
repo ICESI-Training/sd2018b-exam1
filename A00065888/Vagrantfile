@@ -1,0 +1,23 @@
+##Vagrant configure
+Vagrant.configure("2") do |config|
+ config.vm.box = "centos1706_v0.2.0"
+
+#Deploy a DHCP Server
+ config.vm.network "public_network", bridge: "eno1", ip:"192.168.131.179", netmask:"255.255.255.0"
+ config.vm.provision :chef_solo do |chef|
+	chef.install = false
+	chef.cookbooks_path = "cookbooks"
+	chef.add_recipe "dhcp"
+ end 
+end
+
+##
+ ##Deploy a client and provision it
+  config.vm.define "client" do |client|
+    client.vm.network "public_network", bridge: "eno1", type: "dhcp"
+    client.vm.provision :chef_solo do |chef|
+    	chef.install = false
+    	chef.cookbooks_path = "cookbooks"
+	chef.add_recipe "client"
+  	end
+  end  
