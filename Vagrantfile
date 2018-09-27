@@ -18,15 +18,13 @@ Vagrant.configure("2") do |config|
         end
    end
 
-#   config.vm.define "yum_mirror_server" do |yum_mirror_server|
-#    server_mirror.vm.network "public_network", bridge: "eno1", ip: "192.168.130.3", netmask: "255.255.255.0"
-#    server_mirror.vm.provision :chef_solo do |chef|
-#    	chef.install = false
-#    	chef.cookbooks_path = "cookbooks"
-#        chef.add_recipe "httpd"
-#        chef.add_recipe "mirror_server"
-#        end
-#   end
+   config.vm.define "yum_mirror_server" do |yum_mirror_server|
+    yum_mirror_server.vm.network "public_network", bridge: "eno1", ip: "192.168.140.3", netmask: "255.255.255.0"
+    yum_mirror_server.vm.provision :chef_solo do |chef|
+    	chef.install = false
+        chef.add_recipe "yum_mirror_server"
+        end
+   end
 
 #   config.vm.define "yum_client" do |yum_client|
 #    yum_client.vm.network "public_network", bridge: "eno1", type: "dhcp"
@@ -39,7 +37,7 @@ Vagrant.configure("2") do |config|
 #   end
 
 #   config.vm.define "ci_server" do |ci_server|
-#    ci_server.vm.network "public_network", bridge: "eno1", ip: "192.168.130.4", netmask: "255.255.255.0"
+#    ci_server.vm.network "public_network", bridge: "eno1", ip: "192.168.140.4", netmask: "255.255.255.0"
 #    ci_server.vm.provision :chef_solo do |chef|
 #    	chef.install = false
 #    	chef.cookbooks_path = "cookbooks"
