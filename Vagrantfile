@@ -12,9 +12,10 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
+
   config.vm.define :dhcp do |dhcp|
   dhcp.vm.box = "centos1706_v0.2.0"
-  dhcp.vm.network "public_network", bridge:"eno1", ip:"192.168.130.125", netmask:"255.255.255.0"
+  dhcp.vm.network "public_network", bridge:"em1", ip:"192.168.130.125", netmask:"255.255.255.0"
   config.vm.provision :chef_solo do |chef|
 		chef.install = false
 		chef.cookbooks_path = "cookbooks"
@@ -22,19 +23,34 @@ Vagrant.configure("2") do |config|
 	end
    end
 
-  #config.vm.define :cl_server do |cl_server|
-  #cl_server.vm.box = "centos1706_v0.2.0"
-  #cl_server.vm.network :private_network, ip:"192.168.130.3"
-  
-  #end
+  config.vm.define :ci_server do |ci_server|
+  ci_server.vm.box = "centos1706_v0.2.0"
+  ci_server.vm.network :private_network, ip:"192.168.130.3"
+  ci_server.vm.provision :chef_solo do |chef|
+		chef.install = false
+		chef.cookbooks_path = "cookbooks"
+	end
+  end
 
   config.vm.define :mirror_server do |mirror_server|
   mirror_server.vm.box = "centos1706_v0.2.0"
   mirror_server.vm.network "public_nectwork", ip:"192.168.130.10"
+  mirror_server.vm.provision :chef_solo do |chef|
+		chef.install = false
+		chef.cookbooks_path = "cookbooks"
+		chef.add_recipe "mirror"
+	end
   end
   
-  #config.vm.define :cl_server do |cl_server|
-  #cl_server.vm.box = "centos1706_v0.2.0"
+  config.vm.define :client do |client|
+  client.vm.box = "centos1706_v0.2.0"
+  client.vm.network "public_nectwork", ip:"192.168.130.8"
+  client.vm.provision :chef_solo do |chef|
+		chef.install = false
+		chef.cookbooks_path = "cookbooks"
+		chef.add_recipe "client"
+	end
+  end
 
 
   # Disable automatic box update checking. If you disable this, then
