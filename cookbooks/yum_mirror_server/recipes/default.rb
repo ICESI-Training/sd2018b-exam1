@@ -1,0 +1,1 @@
+include_recipe 'yum_mirror_server::yum_mirror_server_config'
