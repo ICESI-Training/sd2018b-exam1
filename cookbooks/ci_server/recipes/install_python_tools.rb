@@ -1,0 +1,9 @@
+bash 'install_ngrok' do
+	  code <<-EOH
+	     yum install -y gcc python-devel python-setuptools
+	     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+	     python get-pip.py
+	     pip install fabric
+	     pip install connexion
+  	  EOH
+end

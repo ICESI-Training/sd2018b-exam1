@@ -1,0 +1,12 @@
+[
+        {
+            "index": 1,
+            "package": "python3",
+            "commands": "https://centos7.iuscommunity.org/ius-release.rpm;python36u;python36u-pip"
+        },
+        {
+            "index": 2,
+            "package": "nmap",
+            "commands": "nmap"
+        }
+]
