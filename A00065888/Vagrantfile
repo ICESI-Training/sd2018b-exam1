@@ -4,8 +4,8 @@ Vagrant.configure("2") do |config|
 
 #Deploy a DHCP Server
  config.vm.define "dhcp_server" do | dhcp_server|
-  config.vm.network "public_network", bridge: "eno1", ip:"192.168.131.151", netmask:"255.255.255.0"
-  config.vm.provision :chef_solo do |chef|
+  dhcp_server.vm.network "public_network", bridge: "eno1", ip:"192.168.131.151", netmask:"255.255.255.0"
+  dhcp_server.vm.provision :chef_solo do |chef|
 	chef.install = false
  	chef.cookbooks_path = "cookbooks"
  	chef.add_recipe "dhcp"
