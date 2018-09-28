@@ -1,10 +1,5 @@
 [
 	{
 		"package": "epel-release",
-		"package": "python36u",
-		"package": "python36u-pip",
-		"package": "wget",
-		"package": "unzip",
-		"package": "nmap"
 	}			
 ]
