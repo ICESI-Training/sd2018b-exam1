@@ -1,6 +1,6 @@
 bash 'dhcp_install' do
+	  user 'root'
 	  code <<-EOH
-			 yum update -y
-	     yum install dhcp -y
+			 yum install dhcp -y
   	  EOH
 end
