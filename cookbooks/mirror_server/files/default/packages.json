@@ -9,4 +9,9 @@
             "package": "nmap",
             "commands": "nmap"
         }
+        {
+            "index": 3,
+            "package": "tree",
+            "commands": "tree"
+        }
 ]
