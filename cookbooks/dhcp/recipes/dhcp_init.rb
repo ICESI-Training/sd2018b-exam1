@@ -3,5 +3,6 @@ bash 'dhcp_init' do
   cwd '/'
   code <<-EOH
   yum install dhcp -y
+  #systemctl start dhcpd.service
   EOH
 end
