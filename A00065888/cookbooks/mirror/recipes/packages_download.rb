@@ -1,5 +1,5 @@
 cookbook_file '/home/vagrant/importweb_packages.py' do
-  source 'process.py'
+  source 'importweb_packages.py'
   owner 'root'
   group 'root'
   mode '0777'
