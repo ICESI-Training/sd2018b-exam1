@@ -7,4 +7,4 @@ x=""
 for i in data:
        x =x + " " + i["package"]
 print x
-os.system("yum install -y" +x)
+os.system("yum install --downloadonly --downloaddir=/var/repo -y" +x)

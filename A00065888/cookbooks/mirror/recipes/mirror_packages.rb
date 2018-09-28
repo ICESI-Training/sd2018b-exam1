@@ -1,6 +1,7 @@
-python 'mirror_packages' do
-	code <<-EOH
-      	print "Hello world! From Chef and Python."
-        
-	EOH
+bash 'mirror_packages' do
+  user 'root'
+  code <<-EOH
+  cd /home/vagrant
+  python process.py
+  EOH
 end
