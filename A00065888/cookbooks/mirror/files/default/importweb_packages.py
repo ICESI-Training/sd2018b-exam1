@@ -1,6 +1,6 @@
-import urllib.request
+import urllib, json
+url = "https://raw.githubusercontent.com/nikoremi97/sd2018b-exam1/nrecalde/sd2018b-exam1/A00065888/cookbooks/mirror/files/default/packages.json "
+response = urllib.urlopen(url)
+data = json.loads(response.read())
 
-# Download the file from `url` and save it locally under `file_name`:
-with urllib.request.urlopen(url) as response, open(packages.json, 'wb') as out_file:
-        data = response.read() # a `bytes` object
-        out_file.write(data)
+print data
