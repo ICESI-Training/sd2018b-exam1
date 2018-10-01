@@ -18,4 +18,4 @@ paths:
             properties:
               command_return:
                 type: string
-description: User information
+                description: User information
