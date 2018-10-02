@@ -19,6 +19,7 @@ Vagrant.configure("2") do |config|
     server_mirror.vm.provision :chef_solo do |chef|
     	chef.install = false
     	chef.cookbooks_path = "cookbooks"
+        chef.add_recipe "httpd"
         chef.add_recipe "mirror_server"
         end
    end
