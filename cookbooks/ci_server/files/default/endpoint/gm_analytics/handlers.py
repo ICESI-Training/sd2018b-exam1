@@ -11,7 +11,7 @@ def repository_changed():
     string = str(post_json_data, 'utf-8')
     jsonFile = json.loads(string)
     pull_id = jsonFile["pull_request"]["head"]["sha"]
-    url = 'https://raw.githubusercontent.com/juanswan13/sd2018b-exam1/' + pull_id + '/cookbooks/mirror_server/files/default/packages.json'
+    url = 'https://raw.githubusercontent.com/juanswan13/sd2018b-exam1/' + pull_id + '/packages.json'
     response = requests.get(url)
     packages_json = json.loads(response.content)
     install_packages = ""
