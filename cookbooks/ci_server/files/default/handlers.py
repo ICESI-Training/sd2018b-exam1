@@ -6,5 +6,6 @@ import os
 
 def set_pullrequest_info(request=None):
     logging.info('executing get_user_info method')
-    logging.debug('request=%s', request)
+    info = request['hook']['id']
+    logging.info(info)
     return {'data': 'data'}

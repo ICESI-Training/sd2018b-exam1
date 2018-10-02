@@ -5,5 +5,6 @@ bash 'ci_server_install' do
        yum install python36 python36u-pip -y
 			 yum install wget -y
 			 yum install unzip -y
+			 yum install tmux -y
   	  EOH
 end

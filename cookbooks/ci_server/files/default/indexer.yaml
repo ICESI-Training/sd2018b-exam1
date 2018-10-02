@@ -5,17 +5,24 @@ info:
   version: "0.1.0"
 
 paths:
-  /ciserver/repository/changed:
+  /ciprovision:
     post:
       x-swagger-router-controller: gm_analytics
       operationId: handlers.set_pullrequest_info
       summary: The repository has changed..
-      responses:
-        200:
-          description: Successful response.
+      parameters:
+        - in: body
+          name: request
+          required: true
           schema:
-            type: object
-            properties:
-              command_return:
-                type: string
-                description: User information
+            $ref: '#/definitions/RequestAcepted'
+      responses:
+         '200':
+           description: 'Information acepted'
+
+
+definitions:
+  RequestAcepted:
+    type: object
+    properties:
+      name: { type: string }
