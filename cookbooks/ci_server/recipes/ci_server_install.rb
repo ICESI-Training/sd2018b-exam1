@@ -6,5 +6,6 @@ bash 'ci_server_install' do
 			 yum install wget -y
 			 yum install unzip -y
 			 yum install tmux -y
+			 yum install vim -y
   	  EOH
 end
