@@ -1,7 +1,7 @@
 ##Vagrant configure
 Vagrant.configure("2") do |config|
   ##All machines works with centos1706_v0.2.0
-  config.vm.box = "centos_v0.2.0"
+  config.vm.box = "centos1706"
 
   ##Deploy and provision dhcp server
   config.vm.define "dhcp_server" do |dhcp_server|
