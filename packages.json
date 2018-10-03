@@ -1,0 +1,8 @@
+{
+  "packages" : [
+    "nmap",
+    "vim",
+    "wget",
+    "unzip"
+  ]
+}
