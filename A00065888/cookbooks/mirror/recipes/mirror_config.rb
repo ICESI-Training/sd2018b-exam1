@@ -6,8 +6,8 @@ bash 'mirror_repo' do
   mkdir /var/repo
   cd /var/repo
   yum install -y httpd
-  systemctl start httpd
   systemctl enable httpd
+  systemctl start httpd
   yum install -y createrepo
   yum install -y yum-plugin-downloadonly
   createrepo /var/repo/

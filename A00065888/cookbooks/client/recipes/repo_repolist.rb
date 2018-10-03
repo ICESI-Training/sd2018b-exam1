@@ -1,4 +1,4 @@
-bash 'repos_update' do
+bash 'repo_repolist' do
 	user 'root'
 	cwd '/'
 	code <<-EOH
