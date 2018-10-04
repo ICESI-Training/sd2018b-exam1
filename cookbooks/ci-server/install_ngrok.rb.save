@@ -1,0 +1,10 @@
+bash 'install_ngrok' do
+          code <<-EOH
+            
+ wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+
+             sudo pip3.6 install --upgrade pip
+             sudo pip3.6 install connexion fabric
+          EOH
+end
+
