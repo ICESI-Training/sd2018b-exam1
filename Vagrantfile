@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
    end
 
    config.vm.define "ci_server" do |ci_server|
-    ci_server.vm.network "public_network", bridge: "eno1", ip: "192.168.131.16", netmask: "255.255.255.0"
+    ci_server.vm.network "public_network", bridge: "eno1", type: "dhcp"
     ci_server.vm.provision :chef_solo do |chef|
     	chef.install = false
     	chef.cookbooks_path = "cookbooks"
