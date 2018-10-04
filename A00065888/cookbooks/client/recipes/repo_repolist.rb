@@ -2,7 +2,8 @@ bash 'repo_repolist' do
 	user 'root'
 	cwd '/'
 	code <<-EOH
-	 yum repolist
+	 yum clean all
 	 yum update -y
+	 yum --disablerepo="*" --enablerepo="icesirepo" list available
 	EOH
 end
