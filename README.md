@@ -46,6 +46,10 @@ Deberá desplegar una plataforma que cumpla con los siguientes requerimientos:
 ![][1]  
 **Figura 1**. Diagrama de Despliegue  
 
+### Examen Desplegado
+
+En esta sección del informe se muestra el examen siendo ejecutado demostrando su correcto funcionamiento
+
 ### Desarrollo del Examen  
 Para realizar el examen se implementó un archivo **Vagrantfile** que permite desplegar los servidores y maquinas requeridas para cumplir con los objetivos del proyecto:
 * CentOS7 DHCP Server
@@ -150,13 +154,105 @@ end
 ```
 ```
 bash 'init_ssh' do
+    user 'root'
+    code <<-EOH
+    systemctl reload sshd.service
+    EOH
+end
+```
+
+**4.  CI Server**  
+Este es el servidor que se encarga de la interacción entre las modificaciones del repositorio en git y el servidor local Mirror Server. Cuando en git se haga un pull request, este servidor es notificado y debe revisar el archivo packages.json del pull request y por medio de ssh instalar los nuevos paquetes en el Mirror Server. Esto se logra mediante la implementación de un API REST utilizando swagger y python3. Para lograr que este servidor funcione como se ha previsto, se le debe aprovisionar python3, el pip de python3, algunas herramientas y utilidades de python3, ngrok (permite exponer el servidor a internet para que pueda ser alcanzado por el webhook de git) y el API REST que ha sido implementado. Para este aprovisionamiento se ha diseñado la siguiente receta.  
+
+* Instalacion de ngrok. Para poder instalar este servicio se debe primero instalar wget y unzip.
+```
+bash 'install_wget' do
   user 'root'
   code <<-EOH
-  systemctl reload sshd.service
+  yum install wget -y
   EOH
 end
 ```
-**4.  CI Server**
+```
+bash 'install_unzip' do
+  user 'root'
+  code <<-EOH
+  yum install unzip -y
+  EOH
+end
+```
+```
+bash 'install_ngrok' do
+	  code <<-EOH
+	     mkdir /home/vagrant/ngrok
+	     cd /home/vagrant/ngrok
+	     wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+	     unzip ngrok-stable-linux-amd64.zip
+	     rm -rf ngrok-stable-linux-amd64.zip
+  	  EOH
+end
+```
+* Instalación de python3 y todas las demás utilidades necesarias
+```
+bash 'install_python3_tools' do
+	  code <<-EOH
+	     yum install -y https://centos7.iuscommunity.org/ius-release.rpm
+	     yum install -y python36u
+	     yum install -y python36u-pip
+             yum install -y python36u-devel.x86_64
+	     pip install --upgrade pip
+             pip3.6 install connexion
+	     pip3.6 install fabric
+  	  EOH
+end
+```
+
+* instalación del endpoint, el endpoint ya se encuentra diseñado e implementado y esta almacenado en la carpeta files/default. En este metodo lo que se hace es crear toda la ruta de archivos del endpoint dentro del CI Server y posteriormente ir copiando los archivos que se encuentran en /files/default.
+
+```
+bash 'set_endpoint' do
+	  code <<-EOH
+	     mkdir /home/vagrant/request_handler
+	     cd /home/vagrant/request_handler
+	     mkdir scripts
+	     mkdir gm_analytics
+	     cd gm_analytics
+	     mkdir swagger
+  	  EOH
+end
+
+cookbook_file '/home/vagrant/request_handler/requirements.txt' do
+	source 'endpoint/requirements.txt'
+	  owner 'root'
+	  group 'root'
+	  mode '0644'
+	  action :create
+end
+
+cookbook_file '/home/vagrant/request_handler/scripts/deploy.sh' do
+	source 'endpoint/scripts/deploy.sh'
+	  owner 'root'
+	  group 'root'
+	  mode '0777'
+	  action :create
+end
+
+cookbook_file '/home/vagrant/request_handler/gm_analytics/handlers.py' do
+	source 'endpoint/gm_analytics/handlers.py'
+	  owner 'root'
+	  group 'root'
+	  mode '0777'
+	  action :create
+end
+
+cookbook_file '/home/vagrant/request_handler/gm_analytics/swagger/indexer.yaml' do
+	source 'endpoint/gm_analytics/swagger/indexer.yaml'
+	  owner 'root'
+	  group 'root'
+	  mode '0777'
+	  action :create
+end
+```  
 
 
 [1]: images/01_diagrama_despliegue.png
