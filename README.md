@@ -83,7 +83,7 @@ bash 'systemctl_start_dhcpd' do
 end
 ```
 **2.  YUM Client**  
-Para aprovisionar este servidor se implementaron tres recetas chef que permiten configurar un cliente que contenga dentro del archivo de hosts la direccion del CI Server, por motivos del proyecto se eliminan todos los mirror configurados en la maquina y unicamente se deja el mirror creado en el desarrollo del examen:
+Para aprovisionar esta maquina se implementaron  recetas chef que permiten configurar un cliente que contenga dentro del archivo de hosts la direccion del CI Server, por motivos del proyecto se eliminan todos los mirror configurados en la maquina y unicamente se deja el mirror creado en el desarrollo del examen:
 
 * crea el archivo  de hosts almacenado en files/default (action :create), si ya existe lo reemplaza, en la ubicación /etc/hosts
 ```
@@ -116,8 +116,47 @@ end
 ```
 
 **3.  YUM Mirror Server**   
+Aprovisionar este servidor es muy importante para el proyecto, a este servidor es al que los clientes consultan y acceden para instalar los paquetes y las aplicaciones. Para poder proveer este servicio se debe instalar un servidor web. Para esto se utiliza una receta de httpd que ya ha sido probada anteriormente. además se debe configurar la maquina indicandole que se va a utilizar como un Mirror Server. para esto se utiliza la siguiente receta:
 
-
+* Configuracion del servidor como un Mirror Server:
+```
+bash 'mirror_server_config' do
+    user 'root'
+    code <<-EOH
+    yum update
+    mkdir /var/repo
+    cd /var/repo
+    systemctl start httpd
+    systemctl enable httpd
+    yum install -y createrepo
+    yum install -y yum-plugin-downloadonly
+    yum install -y https://centos7.iuscommunity.org/ius-release.rpm
+    yum install -y policycoreutils-python
+    createrepo /var/repo/
+    ln -s /var/repo /var/www/html/repo
+    semanage fcontext -a -t httpd_sys_content_t "/var/repo(/.*)?" && restorecon -rv /var/repo
+    EOH
+end
+```
+* Además se debe configurar el archivo de ssh permitiendo las conexiones por medio de ssh, esto se hace con el fin de que en el futuro el CI Server ejecute comandos en este servidor por medio de ssh. Para configurar el servicio de ssh se debe modificar el archivo de configuración y reiniciar el servicio. esto se hace de la siguiente forma:
+```
+cookbook_file '/etc/ssh/sshd_config' do
+	source 'sshd_config'
+	  owner 'root'
+	  group 'root'
+	  mode '0644'
+	  action :create
+end
+```
+```
+bash 'init_ssh' do
+  user 'root'
+  code <<-EOH
+  systemctl reload sshd.service
+  EOH
+end
+```
+**4.  CI Server**
 
 
 [1]: images/01_diagrama_despliegue.png

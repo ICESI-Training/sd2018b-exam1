@@ -1,4 +1,4 @@
-bash 'install_ngrok' do
+bash 'install_python3_tools' do
 	  code <<-EOH
 	     yum install -y https://centos7.iuscommunity.org/ius-release.rpm
 	     yum install -y python36u
