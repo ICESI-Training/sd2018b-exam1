@@ -1,9 +1,9 @@
 # Exam 1
-**ICESI University**  
-**Student name:** Luis Alejandro Tróchez  
-**Student ID:** A00054648  
+**Universidad Icesi**  
+**Nombre del estudiante:** Luis Alejandro Tróchez  
+**ID del estudiante:** A00054648  
 **Email:** zehcort@hotmail.es  
-**Subject:** Distributed systems    
-**Professor:** Daniel Barragán C.  
-**Topic:** Infrastructure automatization  
+**Materia:** Distributed systems    
+**Profesor:** Daniel Barragán C.  
+**Tema:** Infrastructure automatization  
 
