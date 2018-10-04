@@ -1,4 +1,4 @@
-# Exam 1
+# Examen 1
 **Universidad Icesi**  
 **Nombre del estudiante:** Luis Alejandro Tróchez  
 **ID del estudiante:** A00054648  
