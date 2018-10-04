@@ -1,4 +1,4 @@
-[icesirepo]
+[examrepo]
 name=My RPM System Package Repo
 baseurl=http://mirror.icesi.edu.co/repo/
 enabled=1
