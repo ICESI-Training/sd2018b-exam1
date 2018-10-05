@@ -10,7 +10,7 @@
 ### Description  
 This document describes the configuration of virtual machines to meet the requirements of exam 1 for the course of distributed systems at Icesi University in the 2018b period.
 
-![](imgs/01_diagrama_despliegue.png)  
+![](imgs/00_diagrama_despliegue.png)  
 **Figure 1**. Deployment diagram
 
 ### Network Configuration  
@@ -71,7 +71,7 @@ end
 ```
 We perform the provisioning of the machines by executing the ``vagrant up`` command. Next we will describe the recipes necessary to deploy each machine and its function.
 
-#### dhcp_server  
+### dhcp_server  
 This virtual machine is the first to be provisioned. This is provisioned with a dhcp service that provides ips in the range 192.168.140.20 to 192.168.140.100.
 
 We can see the order of execution of the recipes in the file ``default.rb`` in the folder ``cookbooks/dhcp_server/recipes``. Here is the content of the file:
@@ -154,5 +154,48 @@ end
 ```
 We enter the machine through the command ``vagrant ssh dhcp_server`` and we see that the dhcp service is running with the ``systemctl status dhcp`` command. Below is a picture of the virtual machine with the service running:
 
-![](imgs/1. dhcp status.png)  
-**Figure 1**. Deployment diagram
+![](imgs/01_dhcp_status.png)  
+**Figure 2**. Dhcp status
+
+### yum_mirror_server
+This is the second virtual machine that is deployed. This machine is configured as a mirror server that will contain rpms that can be downloaded by the yum_client.
+
+We can see the order of execution of the recipes in the file ``default.rb`` in the folder ``cookbooks/yum_mirror_client/recipes``. Here is the content of the file:
+```
+vi cookbooks/yum_mirror_server/recipes/default.rb
+---
+include_recipe 'yum_mirror_server::yum_mirror_server_config'
+include_recipe 'yum_mirror_server::yum_mirror_server_copy'
+include_recipe 'yum_mirror_server::yum_mirror_server_update'
+include_recipe 'yum_mirror_server::yum_mirror_server_install'
+---
+```
+The first recipe is ``yum_mirror_server_config.rb`` in the ``cookbooks/yum_mirror_server/recipes`` path. This recipe configure the virtual machine as a mirror and install openssh  to allows the ci_server to execute commands remotely through ssh. It also installs python to read and load the dependencies from the ``packages.json`` file in the ``cookbooks/yum_mirror_server/files/default`` path. Here is the content of the recipe:
+```
+vi cookbooks/yum_mirror_server/recipes/yum_mirror_server_config.rb
+---
+bash 'yum_mirror_server_config' do
+    user 'root'
+    code <<-EOH
+        mkdir /var/repo
+        cd /var/repo
+        yum install -y httpd
+        systemctl start httpd
+        systemctl enable httpd
+        yum install -y createrepo
+        yum install -y yum-plugin-downloadonly
+        createrepo /var/repo/
+        ln -s /var/repo /var/www/html/repo
+        yum install -y policycoreutils-python
+        semanage fcontext -a -t httpd_sys_content_t "/var/repo(/.*)?" && restorecon -rv /var/repo
+        yum install -y openssh-server openssh-clients
+        chkconfig sshd on
+        service sshd start
+        rm -rf /etc/ssh/sshd_config
+        yum install https://centos7.iuscommunity.org/ius-release.rpm -y
+        yum install python36 python36u-pip -y
+        mkdir /home/vagrant/packages
+    EOH
+end
+---
+```
