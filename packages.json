@@ -9,5 +9,10 @@
             "index": 2,
             "package": "tree",
             "commands": "tree"
+        },
+        {
+             "index": 3,
+             "package": "gem",
+             "commands": "gem"
         }
 ]
