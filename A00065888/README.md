@@ -17,9 +17,9 @@
 
 
 ## Description
-[1]
+![][1]
 
 ## Solution  
 
 
-[1]:images/01_diagrama_despliegue.png
+[1]: images/01_diagrama_despliegue.png
