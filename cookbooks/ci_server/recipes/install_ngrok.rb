@@ -1,4 +1,4 @@
-bash 'inst_ngrok' do
+bash 'install_ngrok' do
 	  code <<-EOH
 	     mkdir /home/vagrant/ngrok
 	     cd /home/vagrant/ngrok

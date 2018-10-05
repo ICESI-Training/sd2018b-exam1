@@ -1,7 +1,7 @@
  bash 'dhcp_install' do
   user 'root'
   code <<-EOH
-     yum -y install dhcp
+     yum install dhcp -y
     EOH
   
 end

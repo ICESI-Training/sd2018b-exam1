@@ -1,5 +1,4 @@
-include_recipe 'ci_server::install_wget'
-include_recipe 'ci_server::install_unzip'
+include_recipe 'ci_server::list_install'
 include_recipe 'ci_server::install_ngrok'
-include_recipe 'ci_server::install_request_handler'
-include_recipe 'ci_server::install_python3_tools'
+include_recipe 'ci_server::endpoint_conf'
+include_recipe 'ci_server::sent_archivos'

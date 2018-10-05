@@ -1,0 +1,7 @@
+{
+  "packages" : [
+    "nmap",
+    "vim",
+    "python36u-pip"
+  ]
+}
