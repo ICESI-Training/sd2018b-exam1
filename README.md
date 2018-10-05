@@ -46,9 +46,66 @@ Deberá desplegar una plataforma que cumpla con los siguientes requerimientos:
 ![][1]  
 **Figura 1**. Diagrama de Despliegue  
 
-### Examen Desplegado
+### Examen Desplegado  
 
-En esta sección del informe se muestra el examen siendo ejecutado demostrando su correcto funcionamiento
+En esta sección del informe se muestra el examen siendo ejecutado demostrando su correcto funcionamiento.  
+A continuación se muestra un video con el funcionamiento del examen. Primero se muestra que el Mirror Server se encuentra vacio, no cuenta con ningun paquete para brindar a sus clientes. Luego se muestra el ngrok y el endpoint corriendo en el CI Server y se con el link del ngrok se actuliza el webhook. Despues se muestra el packages.json que contiene 3 paquetes a instalar, posteriormente se hace pull request y se muestra cómo el CI Server responde ante esta pull request, se alcanza a a ver que se esta realizando la descarga de los paquetes y por último se muestra como se recibe en la consola del ngrok un mensaje de confirmación 200 OK, lo mismo que en la consola del endpoint 200 OK; esto indicando que el proceso del CI Server se realizó con exito. Para comprobar se muestra en el Mirror Server que antes se encontraba vacío y ahora cuenta con los paquetes que estaban indicados en el packages.json que se mostró en el git.
+
+Ahora se evidencia todo el proceso para lograr el despliegue.  
+  
+ **1.** Primero se debe desplegar todas las maquinas de forma inicial y si el aprovisionamiento se realizó de forma correcta chef deberia terminar de forma exitosa.  
+esto se realiza mediante el comando:
+```
+vagrant up
+```
+![][2]  
+**Figura 2**.  Evidencia vagrant up exitoso
+  
+**2** Una vez que se cuenta con la infraestructura desplegada se debe configurar la clave ssh entre el CI Server y el Mirror Server para que se permita la conexión ssh más adelante. Esto se realizó de la siguiente forma:  
+  
+![][3]  
+**Figura 3**.  Configuracion de las llaves ssh  
+  
+**3** Se evidencia que inicialmente el Mirror Server no cuenta con ningún paquete ya que el packages.json se encontraba vacio.   
+  
+![][4]  
+**Figura 4**.  Mirror server vacio, sin paquetes para ofrecer.  
+  
+**4** Se evidencia que ngrok esta en funcionamiento.   
+  
+![][5]  
+**Figura 5**.  Consola de ngrok.  
+
+**5** Ahora que ya se tiene una url con la que se puede acceder al CI Server desde internet se procede a configurar el webhook. La configuración del webhook es la siguiente:
+  
+![][6]  
+![][7]  
+**Figura 6**.  Configuración del webhook.  
+
+**6** Se evidencia que el endpoint se encuentra en ejecución sin errores:
+  
+![][8]   
+**Figura 7**.  endpoint en ejecución sin errores.  
+
+**7** Se hizo una pull request y se evidencia que el endpoint recibe la solicitud y la procesa, en la captura el CI Server ya se encuentra realizando la descarga de los paquetes en el Mirror Server:
+  
+![][9]   
+**Figura 8**.  endpoint en funcionamiento. 
+
+**8** Se evidencia que tras haber realizado el metodo del endpoint, el servidor web recibe un mensaje de confirmación 200 OK:  
+  
+![][10]   
+**Figura 9**.  consola del ngrok confirmando que el proceso fue exitoso. 
+
+**9** Para terminar de confirmar que el proceso fue un exito se muestra que los paquetes ya se encuentran descargados en el servidor Mirror Server:  
+  
+![][11]   
+**Figura 10**.  Mirror Server mostrando los paquetes ya instalados. 
+
+**10** Por último, se muestra que el servidor Mirror Server funciona de forma correcta ofreciendo los paquetes que tiene descargados a sus clientes. Para esto se hizo uso del Yum Client, esta maquina tiene como unico repositorio de archivos al servidor Mirror Server. Es decir que de la unica fuente donde puede descargar aplicaciones es desde nuestro propio servidor. Para comprobar que el servidor estaba funcionando de forma correcta desde el Yum Client se realizó la instalacion de la aplicación tree.
+  
+![][12]   
+**Figura 11**.  Evidencia buen funcionamiento Mirror Server y Yum Client. 
 
 ### Desarrollo del Examen  
 Para realizar el examen se implementó un archivo **Vagrantfile** que permite desplegar los servidores y maquinas requeridas para cumplir con los objetivos del proyecto:
@@ -256,3 +313,14 @@ end
 
 
 [1]: images/01_diagrama_despliegue.png
+[2]: images/vagrantup_exitoso.png
+[3]: images/ssh_config_keys.png
+[4]: images/mirror_server_empty.png
+[5]: images/ngrok_working.png
+[6]: images/weebhool_config1.png
+[7]: images/weebhook_config2.png
+[8]: images/endpoint_playing.png
+[9]: images/endpoint_installing_packages.png
+[10]: images/post_works.png
+[11]: images/mirror_server_full.png
+[12]: images/mirror_client_working.png
