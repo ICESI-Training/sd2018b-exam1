@@ -3,8 +3,6 @@ bash 'endpoint_config' do
 	     mkdir /home/vagrant/endpoint
 	     cd /home/vagrant/endpoint
 	     mkdir scripts
-	     mkdir gm_analytics
-	     cd gm_analytics
-	     mkdir swagger
-  	  EOH
+	     mkdir -p gm_analytics/swagger
+			 EOH
 end
