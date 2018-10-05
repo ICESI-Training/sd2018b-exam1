@@ -1,0 +1,3 @@
+include_recipe 'yum_mirror_client::yum_mirror_client_conf'
+include_recipe 'yum_mirror_client::yum_mirror_client_copy'
+include_recipe 'yum_mirror_client::yum_mirror_client_update'
