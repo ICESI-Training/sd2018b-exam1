@@ -1,4 +1,4 @@
-cookbook_file '/home/vagrant/endpoint/scripts/deploy.sh' do
+.cookbook_file '/home/vagrant/endpoint/scripts/deploy.sh' do
     source 'deploy.sh'
     owner 'root'
     group 'root'

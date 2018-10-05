@@ -27,15 +27,6 @@ Vagrant.configure("2") do |config|
         end
    end
 
-   config.vm.define "yum_client" do |yum_client|
-    yum_client.vm.network "public_network", bridge: "eno1", type: "dhcp"
-    yum_client.vm.provision :chef_solo do |chef|
-    	chef.install = false
-    	chef.cookbooks_path = "cookbooks"
-        chef.add_recipe "yum_mirror_client"
-        end
-   end
-   
    config.vm.define "ci_server" do |ci_server|
     ci_server.vm.network "public_network", bridge: "eno1", ip: "192.168.140.4", netmask: "255.255.255.0"
     ci_server.vm.provision :chef_solo do |chef|
@@ -45,4 +36,12 @@ Vagrant.configure("2") do |config|
         end
    end
 
+   config.vm.define "yum_client" do |yum_client|
+    yum_client.vm.network "public_network", bridge: "eno1", type: "dhcp"
+    yum_client.vm.provision :chef_solo do |chef|
+    	chef.install = false
+    	chef.cookbooks_path = "cookbooks"
+        chef.add_recipe "yum_mirror_client"
+        end
+   end
 end

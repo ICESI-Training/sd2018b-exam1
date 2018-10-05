@@ -1,4 +1,4 @@
-bash 'yum_mirror_server_config' do
+bash 'yum_mirror_server_install' do
     user 'root'
     code <<-EOH
         cd /home/vagrant/packages

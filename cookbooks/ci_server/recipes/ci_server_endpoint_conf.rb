@@ -1,4 +1,4 @@
-bash 'ci_server_install' do
+bash 'ci_server_endpoint_conf' do
     user 'root'
     code <<-EOH
         pip3.6 install connexion
