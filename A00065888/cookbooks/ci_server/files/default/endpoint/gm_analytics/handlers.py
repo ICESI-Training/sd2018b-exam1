@@ -1,5 +1,5 @@
 import os
-from fabric import connection
+from fabric import Connection
 from flask import request
 import logging
 import json
@@ -10,13 +10,15 @@ def notify_repository_change():
     data = str(request_data, 'utf-8')
     jsonData = json.loads(data)
     id_pull_request = jsonData["pull_request"]["head"]["sha"]
-    url = 'https://raw.githubusercontent.com/nikoremi97/sd2018b-exam1/nrecalde/sd2018b-exam1/A00065888/' + id_pull_request + '/packages.json'
+    url = 'https://raw.githubusercontent.com/nikoremi97/sd2018b-exam1/' + id_pull_request + '/packages.json'
     response = requests.get(url)
     packages_json = json.loads(response.content)
     packages=""
-    for i in data:
+    for i in packages_json:
            packages =packages + " " + i["package"]
-    new_packages_to_install = Connection('vagrant@192.168.131.152').run('sudo yum install --downloadonly --downloaddir=/var/repo' + packages)
-    logging.debug(new_packages_to_install)
+    mirror_connection = Connection(host='root@192.168.131.152',connect_kwargs={"password":"vagrant"})
+    output = mirror_connection.run('sudo yum install --downloadonly --downloaddir=/var/repo' + packages)
+    mirror_connection.run('createrepo --update /var/repo')
+    logging.debug(output)
     result = {'command_return': 'success'}
     return result
