@@ -5,7 +5,8 @@
 **Tema:** Automatización de infraestructura  
 **Correo:** daniel.barragan at correo.icesi.edu.co  
 **Estudiante:** Jonatan Ordoñz Burbano  
-**Código:** A00054000
+**Código:** A00054000  
+**Repositorio:** https://github.com/JonatanOrdonez/sd2018b-exam1/tree/jordonez/sd2018b-exam1
 
 ### Description  
 This document describes the configuration of virtual machines to meet the requirements of exam 1 for the course of distributed systems at Icesi University in the 2018b period.
@@ -366,7 +367,9 @@ cookbook_file '/home/vagrant/endpoint/gm_analytics/swagger/indexer.yaml' do
 end
 ---
 ```
+
 After configuring ngrok correctly and raising our api through the connexion library, you can observe the following:
+
 ![](imgs/04_ci_services_on.png)  
 **Figure 5**. Ci server working
 
@@ -435,11 +438,79 @@ def set_pullrequest_info():
 In the following image you can see how the webhook receives a message from the service that the process of installing the packages was successful:
 
 ![](imgs/08_webhook_acepted.png)  
-**Figure 8**. webhook response from ci_server service
+**Figure 9**. webhook response from ci_server service
 
 Returning to the ``yum_mirror_server``, we can see in the following image that our rpms were added and this virtual machine. This indicates that the continuous integration service installs remotely the new packages contained in a list of the packages.json file:
 
 ![](imgs/09_mirror_new_packages.png)  
-**Figure 8**. yum_mirror_server with new rpms
+**Figure 10**. yum_mirror_server with new rpms
 
 ### yum_client
+The last virtual machine that is deployed is the ``yum_client``. This machine is provisioned with the necessary files to detect ``yum_mirror_server`` as a mirror server from which rpms can be downloaded.
+
+We can see the order of execution of the recipes in the file ``default.rb`` in the folder ``cookbooks/yum_mirror_client/recipes``. Here is the content of the file:
+```
+vi cookbooks/yum_mirror_client/recipes/default.rb
+---
+include_recipe 'yum_mirror_client::yum_mirror_client_conf'
+include_recipe 'yum_mirror_client::yum_mirror_client_copy'
+include_recipe 'yum_mirror_client::yum_mirror_client_update'
+---
+```
+The first recipe is ``yum_mirror_client_conf.rb``. This recipe removes the hosts file in the path ``/etc/`` to provision a new hosts file with the ip of the ``yum_mirror_server`` and an associated URL.
+```
+vi cookbooks/yum_mirror_client/recipes/yum_mirror_client_conf.rb
+---
+bash 'yum_mirror_client_conf' do
+    user 'root'
+    code <<-EOH
+        rm -rf /etc/hosts
+    EOH
+end
+---
+```
+The second recipe is ``yum_mirror_client_copy.rb`` that copies the hosts and ``icesi.repo`` files inside the virtual machine. Next the content of the recipe:
+```
+vi cookbooks/yum_mirror_client/recipes/yum_mirror_client_copy.rb
+---
+cookbook_file '/etc/hosts' do
+    source 'hosts'
+    owner 'root'
+    group 'root'
+    mode '0644'
+    action :create
+end
+
+cookbook_file '/etc/yum.repos.d/icesi.repo' do
+    source 'icesi.repo'
+    owner 'root'
+    group 'root'
+    mode '0644'
+    action :create
+end
+---
+```
+The last recipe is ``yum_mirror_client_update.rb`` which is responsible for cleaning the list of repositories and making an updated download of these to get the latest versions of rpms. In the following image the contents of the recipe:
+```
+vi cookbooks/yum_mirror_client/recipes/yum_mirror_client_update.rb
+---
+bash 'yum_mirror_client_update' do
+    user 'root'
+    code <<-EOH
+        yum clean all
+        yum repolist
+        yum update -y
+        yum --disablerepo="*" --enablerepo="icesirepo" list available
+    EOH
+end
+---
+```
+when executing the command ``yum repolist`` we can see that ``icesirepo`` is already loaded and has content of some rpms that were those that were loaded with the previous procedures. In the following image we see the repository we have added:
+
+![](imgs/10_ym_client_repos_list.png)  
+**Figure 11**. list of repos
+
+In the next image we make a test by downloading the nmap package from icesi repo. We can see that the download is successful, which confirms that all the other provisions including the internal processes are carried out successfully:
+
+![](imgs/11_client_install_nmap.png)  
+**Figure 11**. install nmap
