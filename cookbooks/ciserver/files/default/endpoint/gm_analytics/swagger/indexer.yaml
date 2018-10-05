@@ -17,5 +17,5 @@ paths:
             type: object
             properties:
               command_return:
-              type: string
-              description: User pullrequest information.
+                type: string
+                description: User pullrequest information.
