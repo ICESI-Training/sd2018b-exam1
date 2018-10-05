@@ -1,0 +1,6 @@
+{
+  "packages" : [
+    "tmux",
+    "curl"
+  ]
+}

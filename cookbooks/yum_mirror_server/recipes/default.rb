@@ -1,0 +1,4 @@
+include_recipe 'yum_mirror_server::yum_mirror_server_config'
+include_recipe 'yum_mirror_server::yum_mirror_server_copy'
+include_recipe 'yum_mirror_server::yum_mirror_server_update'
+include_recipe 'yum_mirror_server::yum_mirror_server_install'
