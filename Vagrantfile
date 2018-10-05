@@ -2,6 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
+ config.vm.box = "centos1706_v0.2.0"
 
 #DHCP--------------------------------------------------------------------------------------
 
@@ -12,10 +13,35 @@ Vagrant.configure("2") do |config|
        chef.install = false
        chef.cookbooks_path = "cookbooks"
        chef.add_recipe "dhcpd"
+	chef.add_recipe "httpd"
     end  
   end
 
-#CI------------------------------------------------------------------------------------------
+#Mirror--------------------------------------------------------------------------------------
+
+  config.vm.define "Mirror_Server" do |mirrorServer|
+    mirrorServer.vm.network "public_network", bridge: "eno1", ip:"192.168.131.22", netmask: "255.255.255.0"
+    mirrorServer.vm.provision :chef_solo do |chef|
+       chef.install = false
+       chef.cookbooks_path = "cookbooks"
+	chef.add_recipe "httpd"
+       chef.add_recipe "mirror"
+    end
+  end
+
+#Client--------------------------------------------------------------------------------------
+
+  config.vm.define "YUM_Client" do |mirrorClient|
+    mirrorClient.vm.network "public_network", bridge: "eno1", type: "dhcp"
+    mirrorClient.vm.provision :chef_solo do |chef|
+    	chef.install = false
+    	chef.cookbooks_path = "cookbooks"
+	chef.add_recipe "httpd"
+        chef.add_recipe "client"
+	
+    end
+  end
+#CI--------------------------------------------------------------------------------------------
 
   config.vm.define "CI_Server" do |ciServer|
     ciServer.vm.box = "centos1706_v0.2.0"
@@ -24,32 +50,9 @@ Vagrant.configure("2") do |config|
        chef.install = false
        chef.cookbooks_path = "cookbooks"
        chef.add_recipe "ci"
+	chef.add_recipe "httpd"
     end
   end
 
-#Mirror--------------------------------------------------------------------------------------
-
-  config.vm.define "Mirror_Server" do |mirrorServer|
-    mirrorServer.vm.box = "centos1706_v0.2.0"
-    mirrorServer.vm.network "public_network", bridge: "eno1", ip:"192.168.131.22", netmask: "255.255.255.0"
-    mirrorServer.vm.provision :chef_solo do |chef|
-       chef.install = false
-       chef.cookbooks_path = "cookbooks"
-       chef.add_recipe "mirror"
-    end
-  end
-
-#Client--------------------------------------------------------------------------------------
-
-  config.vm.define "YUM_Client" do |mirrorClient|
-    mirrorClient.vm.box = "centos1706_v0.2.0"
-    mirrorClient.vm.network "public_network", bridge: "eno1", type: "dhcp"
-    mirrorClient.vm.provision :chef_solo do |chef|
-    	chef.install = false
-    	chef.cookbooks_path = "cookbooks"
-        chef.add_recipe "client"
-    end
-  end
-#--------------------------------------------------------------------------------------------
 
 end

@@ -1,4 +1,4 @@
-bash 'repos_update' do
+bash 'repo_update' do
   user 'root'
   code <<-EOH
   yum repolist
