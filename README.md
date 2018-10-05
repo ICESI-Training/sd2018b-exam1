@@ -71,6 +71,8 @@ end
 ```
 We perform the provisioning of the machines by executing the ``vagrant up`` command. Next we will describe the recipes necessary to deploy each machine and its function.
 
+![](imgs/02_vbox_machines.png)  
+**Figure 2**. Virtual machines deployed and running.
 ### dhcp_server  
 This virtual machine is the first to be provisioned. This is provisioned with a dhcp service that provides ips in the range 192.168.140.20 to 192.168.140.100.
 
@@ -155,7 +157,7 @@ end
 We enter the machine through the command ``vagrant ssh dhcp_server`` and we see that the dhcp service is running with the ``systemctl status dhcp`` command. Below is a picture of the virtual machine with the service running:
 
 ![](imgs/01_dhcp_status.png)  
-**Figure 2**. Dhcp status
+**Figure 3**. Dhcp status
 
 ### yum_mirror_server
 This is the second virtual machine that is deployed. This machine is configured as a mirror server that will contain rpms that can be downloaded by the yum_client.
@@ -199,3 +201,61 @@ bash 'yum_mirror_server_config' do
 end
 ---
 ```
+The second recipe that runs is ``yum_mirror_server_copy.rb``. This recipe copies within the virtual machine the ``packages.json`` files containing the dependencies that will be installed in the mirror, ``install_packages.py`` which is a script that is responsible for reading the packages.json file and installing the dependencies and ``sshd_config`` which is the configuration to allow ssh connection from remote systems. Here is the content:
+```
+vi cookbooks/yum_mirror_server/recipes/yum_mirror_server_copy.rb
+---
+cookbook_file '/etc/ssh/sshd_config' do
+    source 'sshd_config'
+    owner 'root'
+    group 'root'
+    mode '0644'
+    action :create
+end
+
+cookbook_file '/home/vagrant/packages/packages.json' do
+    source 'packages.json'
+    owner 'root'
+    group 'root'
+    mode '0644'
+    action :create
+end
+
+cookbook_file '/home/vagrant/packages/install_packages.py' do
+    source 'install_packages.py'
+    owner 'root'
+    group 'root'
+    mode '0644'
+    action :create
+end
+---
+```
+The third recipe is ``yum_mirror_server_install.rb``. This receptacle allows to execute the ``install_packages.py`` file that reads the ``packages.json`` file and installs the dependencies inside the virtual machine. The content of the file is shown below:
+```
+vi cookbooks/yum_mirror_server/recipes/yum_mirror_server_install.rb
+---
+bash 'yum_mirror_server_config' do
+    user 'root'
+    code <<-EOH
+        cd /home/vagrant/packages
+        python3.6 install_packages.py
+    EOH
+end
+---
+```
+The last recipe is ``yum_mirror_server_update.rb`` that restarts the sshd service with the new configuration. Next the content of the file:
+```
+vi cookbooks/yum_mirror_server/recipes/yum_mirror_server_update.rb
+---
+bash 'yum_mirror_server_config' do
+    user 'root'
+    code <<-EOH
+        systemctl reload sshd.service
+    EOH
+end
+---
+```
+Then we can see the virtual machine with the rpms installed:
+
+![](imgs/03_ym_server_initial_rpms.png)  
+**Figure 4**. Mirror rpms
