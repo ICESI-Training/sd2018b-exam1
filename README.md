@@ -5,5 +5,5 @@
 **Email:** zehcort@hotmail.es  
 **Materia:** Distributed systems    
 **Profesor:** Daniel Barragán C.  
-**Tema:** Infrastructure automatization  
+**Tema:** Automatización de Infraestructura   
 
