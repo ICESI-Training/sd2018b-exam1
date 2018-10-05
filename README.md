@@ -514,3 +514,8 @@ In the next image we make a test by downloading the nmap package from icesi repo
 
 ![](imgs/11_client_install_nmap.png)  
 **Figure 11**. install nmap
+
+### Porblems during deployment
+1. One of the most important errors I had when validating the operation of the ci_server was when it should execute command in the ``yum_mirror_server``. At first I did not want to execute the commands and it was because the ``yum_mirror_server`` did not allow the connection through ssh. To solve this problem update ssh services by installing new versions and this I did in the file ``cookbooks/yum_mirror_server/recipes/yum_mirror_server_config.rb`` so that the new changes will be executed when provisioned. The next thing was to start the ssh service with the command ``service sshd start``.
+
+1. Another problem I had was when I tried to install a package in the ``yum_client`` and the icesi mirror appeared without packages. What I did was run ``yum clean all`` command to delete the mirro database and again run ``yum update`` command.
