@@ -49,8 +49,11 @@ Deberá desplegar una plataforma que cumpla con los siguientes requerimientos:
 ### Examen Desplegado  
 
 En esta sección del informe se muestra el examen siendo ejecutado demostrando su correcto funcionamiento.  
-A continuación se muestra un video con el funcionamiento del examen. Primero se muestra que el Mirror Server se encuentra vacio, no cuenta con ningun paquete para brindar a sus clientes. Luego se muestra el ngrok y el endpoint corriendo en el CI Server y se con el link del ngrok se actuliza el webhook. Despues se muestra el packages.json que contiene 3 paquetes a instalar, posteriormente se hace pull request y se muestra cómo el CI Server responde ante esta pull request, se alcanza a a ver que se esta realizando la descarga de los paquetes y por último se muestra como se recibe en la consola del ngrok un mensaje de confirmación 200 OK, lo mismo que en la consola del endpoint 200 OK; esto indicando que el proceso del CI Server se realizó con exito. Para comprobar se muestra en el Mirror Server que antes se encontraba vacío y ahora cuenta con los paquetes que estaban indicados en el packages.json que se mostró en el git.
-
+A continuación se muestra un video con el funcionamiento del examen. Primero se muestra que el Mirror Server se encuentra vacio, no cuenta con ningun paquete para brindar a sus clientes. Luego se muestra el ngrok y el endpoint corriendo en el CI Server y se con el link del ngrok se actuliza el webhook. Despues se muestra el packages.json que contiene 3 paquetes a instalar, posteriormente se hace pull request y se muestra cómo el CI Server responde ante esta pull request, se alcanza a a ver que se esta realizando la descarga de los paquetes y por último se muestra como se recibe en la consola del ngrok un mensaje de confirmación 200 OK, lo mismo que en la consola del endpoint 200 OK; esto indicando que el proceso del CI Server se realizó con exito. Para comprobar se muestra en el Mirror Server que antes se encontraba vacío y ahora cuenta con los paquetes que estaban indicados en el packages.json que se mostró en el git. 
+  
+#### PARA VER EL VIDEO DAR CLICK EN LA IMAGEN A CONTINUACIÓN:
+[![Alt text](https://i.ytimg.com/vi/cWrRMzsfo1U/hqdefault.jpg)](https://youtu.be/cWrRMzsfo1U)
+  
 Ahora se evidencia todo el proceso para lograr el despliegue.  
   
  **1.** Primero se debe desplegar todas las maquinas de forma inicial y si el aprovisionamiento se realizó de forma correcta chef deberia terminar de forma exitosa.  
