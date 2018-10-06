@@ -35,9 +35,8 @@ The repository must have a Vagrantfile that allows the deployment of three virtu
   
   ## Solution
 
- The Linux commands necessary for the provisioning of the requested services are the following:
- 
- The following shows the order in which the machines are executed.By using the ```vagrant up``` command.
+ The following shows the order in which the machines are executed in the Vagrantfile, this through the use of the command ```vagrant up```.
+ Each of the machines uses centos1706_v0.2.0
 
  
  ```
@@ -88,7 +87,79 @@ The repository must have a Vagrantfile that allows the deployment of three virtu
  
  **dhcp configuration:**
  
+ In order to install the dhcp service, provisioning is carried out using the chef recipes shown below.
  
+ This recipe installs the dhcp service in the machine.
+ 
+ ```
+ bash 'dhcp_install' do
+  user 'root'
+  code <<-EOH
+     yum install dhcp -y
+    EOH
+end
+```     
+
+###
+
+This recipe copies the configuration file dhcpd.conf into the path cookbooks/dhcp/files/default
+
+```
+  cookbook_file '/etc/dhcp/dhcpd.conf' do
+  source 'dhcpd.conf'
+  mode '0644'
+  owner 'root'
+  group 'root'
+  action :create
+end
+
+```
+
+###
+
+The recipe dhcp_init.rb is responsible for starting the dhcp service. 
+
+```
+bash 'dhcp_init' do
+  user 'root'
+  code <<-EOH
+  systemctl start dhcpd.service
+  EOH
+end
+
+```
+ 
+
+**Ci server configuration**
+The function of this machine is to expose a service through an endpoint. Inside, the virtual machine reads the packages.json file located at the root of the repository.
+
+These are the recipes it contains and in this order are executed
+```
+include_recipe 'ci_server::list_install'
+include_recipe 'ci_server::install_ngrok'
+include_recipe 'ci_server::endpoint_conf'
+include_recipe 'ci_server::sent_archivos'
+```
+
+The following recipe install_ngrok.rb downloads a compressed file from the ngrok page, extracts it to expose the server via a public URL registered in ngrok. The content of the recipe is shown below:
+
+```
+bash 'install_ngrok' do
+	  code <<-EOH
+	     mkdir /home/vagrant/ngrok
+	     cd /home/vagrant/ngrok
+	     wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+	     unzip ngrok-stable-linux-amd64.zip
+	     rm -rf ngrok-stable-linux-amd64.zip
+  	  EOH
+end
+```
+
+So we can verify that he's actually exposing himself.
+
+![](imagenes/ngrok.png)
+
+
   
   
   
