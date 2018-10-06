@@ -7,11 +7,11 @@
 **Student ID:** A00065868  
 **Email:** ana_fernanda_25@hotmail.com  
   
-##Goals
+### Goals
 * Perform in an autonomously way the automatic provisioning of an specific infrastructure.  
 * Diagnose and execute in an autonomously way all needed actions to achieve global stable infrastructures.  
 
-##Used Technologies  
+### Used Technologies  
 * Vagrant  
 * CentOS7 Box  
 * GitHub Repository - Webhook    
@@ -19,7 +19,7 @@
 * Python3 libs: Flask, Connexion, Fabric  
 * Ngrok  
 
-##Description   
+### Description   
 
 To achieve the goals presented before is necessary to deploy a platform with the following requirements:  
 *   First, it was necessary to create a Vagrantfile with
