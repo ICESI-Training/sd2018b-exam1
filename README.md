@@ -76,7 +76,7 @@ In order to deploy the infastructure correctly, the Vagrantfile is configured to
 | vagrant status  | Checks if every VM is running  |  
 
 The next figure shows an example of the *vagrant status* command:  
-![][2]  
+![][2]
 
 Now let's go to the CI_Server to test the flask application...  
 In order to do that, you have to type the next command:  
@@ -85,16 +85,22 @@ vagrant ssh ci_server
 ```
 This allows us to connect to the specified VM. If we have to connect to another, we have to replace *ci_server* for the name of that VM.  
 The first thing we have to do is set up **ngrok**, which is a tool that exposes local servers behind NATs and firewalls to the public internet over secure tunnels. To enable *ngrok* we must type the next commands:  
-![][3]  
+![][3]
+
 Now that ngrok is active, it gave us a public url for our application. An example of it is as follows:  
-![][4]  
+![][4]
+
 But, why do we have to expose our endpoint to public? This is simple, Github Webhooks allow external services to be notified when certain events happen. When the specified events happen, we’ll send a POST request to each of the URLs you provide. So to set this webhook, we must provide a public url and set json as content type, as follows:  
-![][5]  
+![][5]
+
 And in options, we select pull request only, as follows:  
-![][6]  
+![][6]
+
 The first thing we have to do to test the app is add a new content to our packages.json file. In this example I added the next packages:  
-![][7]  
+![][7]
+
 Now that everything is set, to test the endpoint we have to type the next commands:  
+
 | Command | Description  |
 |:-:|:-:|
 | sudo su | Loggin as root  |
@@ -104,12 +110,22 @@ Now that everything is set, to test the endpoint we have to type the next comman
 | connexion run gm_analytics/swagger/indexer.yaml --debug -p 80 -H 127.0.0.1  | Run the app in debug mode on 127.0.0.1:80  |   
 
 The CI_Server has download the new packages on the Mirror_Server if we get something like this:  
-![][8]  
-Now, doing ssh to the mirror server, we verify if the packages has downloaded well, as follows:  
-![][9] 
-Now lest move to the Client to get the new packages from mirror...
-! 
+![][8]
 
+Now, doing ssh to the mirror server, we verify if the packages has downloaded well, as follows:  
+![][9]
+
+Now lest move to the Client to get the new packages from mirror...
+We have to type the next commands to get the new packages:
+```
+sudo yum clean all
+sudo yum update
+sudo yum --disablerepo="*" --enablerepo="icesirepo" list available
+```
+With the last command, we get the list of all packages availables in our mirror, as follows:  
+![][10]
+
+## Issues
 
 
 ## References  
@@ -119,13 +135,13 @@ Now lest move to the Client to get the new packages from mirror...
 * https://ngrok.com/docs
 * https://github.com/ICESI/so-microservices-python-part1/tree/master/03_intro_swagger  
 
-
-[1]: images/01_diagrama_despliegue.png
-[2]: images/vagrant_status.png
-[3]: images/how_ to_activate_ngrok.png
-[4]: images/ngrok_running.png
-[5]: images/how_to_activate_webhook.png
-[6]: images/select_pull_request.png
-[7]: images/update_packages_json.png
-[8]: images/download_new_packages_ngrok_200.png
-[9]: images/comprobar_descarga_de_paquetes.png
+[1]: images/01_diagrama_despliegue.png  
+[2]: images/vagrant_status.png  
+[3]: images/how_to_activate_ngrok.png  
+[4]: images/ngrok_running.png  
+[5]: images/how_to_activate_webhook.png  
+[6]: images/select_pull_request.png  
+[7]: images/update_packages_json.png  
+[8]: images/download_new_packages_ngrok_200.png  
+[9]: images/comprobar_descarga_de_paquetes.png 
+[10]: images/list_avaiable_client.png
