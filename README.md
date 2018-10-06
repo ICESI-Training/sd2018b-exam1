@@ -76,7 +76,8 @@ In order to deploy the infastructure correctly, the Vagrantfile is configured to
 | vagrant status  | Checks if every VM is running  |  
 
 The next figure shows an example of the *vagrant status* command:  
-![][2]
+![][2]  
+**Figure 2.** Vagrant status.    
 
 Now let's go to the CI_Server to test the flask application...  
 In order to do that, you have to type the next command:  
@@ -85,19 +86,24 @@ vagrant ssh ci_server
 ```
 This allows us to connect to the specified VM. If we have to connect to another, we have to replace *ci_server* for the name of that VM.  
 The first thing we have to do is set up **ngrok**, which is a tool that exposes local servers behind NATs and firewalls to the public internet over secure tunnels. To enable *ngrok* we must type the next commands:  
-![][3]
+![][3]  
+**Figure 3.** How to active ngrok.  
 
 Now that ngrok is active, it gave us a public url for our application. An example of it is as follows:  
-![][4]
+![][4]  
+**Figure 4.** Ngrok running.  
 
 But, why do we have to expose our endpoint to public? This is simple, Github Webhooks allow external services to be notified when certain events happen. When the specified events happen, we’ll send a POST request to each of the URLs you provide. So to set this webhook, we must provide a public url and set json as content type, as follows:  
-![][5]
+![][5]  
+**Figure 5.** How to active Github Webhook.  
 
 And in options, we select pull request only, as follows:  
-![][6]
+![][6]  
+**Figure 6.** Pull request option.  
 
 The first thing we have to do to test the app is add a new content to our packages.json file. In this example I added the next packages:  
-![][7]
+![][7]  
+**Figure 7.** packages.json file update.  
 
 Now that everything is set, to test the endpoint we have to type the next commands:  
 
@@ -110,10 +116,12 @@ Now that everything is set, to test the endpoint we have to type the next comman
 | connexion run gm_analytics/swagger/indexer.yaml --debug -p 80 -H 127.0.0.1  | Run the app in debug mode on 127.0.0.1:80  |   
 
 The CI_Server has download the new packages on the Mirror_Server if we get something like this:  
-![][8]
+![][8]  
+**Figure 8.** Endpoint success.  
 
 Now, doing ssh to the mirror server, we verify if the packages has downloaded well, as follows:  
-![][9]
+![][9]  
+**Figure 9.** Verify new packages on mirror.  
 
 Now lest move to the Client to get the new packages from mirror...
 We have to type the next commands to get the new packages:
@@ -123,16 +131,19 @@ sudo yum update
 sudo yum --disablerepo="*" --enablerepo="icesirepo" list available
 ```
 With the last command, we get the list of all packages availables in our mirror, as follows:  
-![][10]
+![][10]  
+**Figure 10.** New packages available.  
 
 ## Issues
-
+To achive the objects of this exam, some issues were found. First, some of the chre recipes did not worked well, so I had to search it on Chef docs to know how it's done. Second, a static IP had to be set on the mirror server in order to configure the mirror on the client and to execute remote commands via CI_Server. Third, the sshd_conf file on the mirror server was not configure to execute ssh,  and root login on that machine. So it was needed to set a new sshd_conf file to download the new packages on it. Finally, it was not easy to process the new packages.json in the new pull request. Many tries and errors happened here, but in the end everything was possible to do.
 
 ## References  
 * https://developer.github.com/v3/guides/building-a-ci-server/
 * https://developer.github.com/v3/repos/statuses/
 * https://developer.github.com/webhooks/configuring/#using-ngrok
 * https://ngrok.com/docs
+* https://docs.chef.io/
+* https://connexion.readthedocs.io/en/latest/
 * https://github.com/ICESI/so-microservices-python-part1/tree/master/03_intro_swagger  
 
 [1]: images/01_diagrama_despliegue.png  
