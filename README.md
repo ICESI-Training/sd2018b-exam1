@@ -1,8 +1,8 @@
 # Distributed Systems Exam 1  
 **Icesi University**  
-**Course**: Distributed Systems
+**Course**: Distributed Systems  
 **Name**: Nicolas Recalde Miranda  
-**Student Github Username**: nikoremi97
+**Student Github Username**: nikoremi97  
 **Student ID**: A00065888  
 **Topic**:Infrastructure automatization  
 **Git URL**: https://github.com/nikoremi97/sd2018b-exam1.git
@@ -31,7 +31,7 @@ The architecture diagram is presented as follows:
 **Figure 1.** Architecture diagram.
 ## Solution   
 ### Provisioning VMs  
-
+Vagrant is used to provision all VMs with the correct configuration. The Vagrantfile is located in the "exam1" folder. The provisioning of each VM is described by Chef recipes located in the cookbooks folder.
 ## References  
 * https://developer.github.com/v3/guides/building-a-ci-server/
 * https://developer.github.com/v3/repos/statuses/
