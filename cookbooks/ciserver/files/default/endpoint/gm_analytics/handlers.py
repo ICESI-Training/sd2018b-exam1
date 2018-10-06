@@ -12,8 +12,10 @@ def get_pullrequest_packages():
     response_packages_url = requests.get(packages_url)
     packages_data    =  json.loads(response_packages_url.content)
     packages_line = ""
-    for i in packages_data[packages]:
+    for i in packages_data:
         packages = i[package_commands]
         for j in packages:
             packages_line = packages_line + " " + j
     connect         = Connection('vagrant@192.168.137.3').run('sudo yum install --downloadonly --downloaddir=/var/repo' + packages_line)
+    out = {'command_return': 'OK'}
+    return out
