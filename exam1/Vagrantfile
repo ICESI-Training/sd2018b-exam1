@@ -1,0 +1,47 @@
+[##Vagrant configure
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos1706_v0.2.0"
+
+#Deploy a DHCP Server
+ config.vm.define "dhcp_server" do | dhcp_server|
+  dhcp_server.vm.network "public_network", bridge: "eno1", ip:"192.168.131.151", netmask:"255.255.255.0"
+  dhcp_server.vm.provision :chef_solo do |chef|
+	chef.install = false
+ 	chef.cookbooks_path = "cookbooks"
+ 	chef.add_recipe "dhcp"
+  end
+ end
+ ##Deploy & provision yum mirror_server
+ config.vm.define "mirror_server" do |mirror_server|
+  mirror_server.vm.network "public_network", bridge: "eno1", ip: "192.168.131.152", netmask: "255.255.255.0"
+  mirror_server.vm.provision :chef_solo do |chef|
+       	chef.install = false
+   	chef.cookbooks_path = "cookbooks"
+	chef.add_recipe "mirror"
+  	chef.add_recipe "httpd"
+	end
+ end
+
+
+
+ ##Deploy &  provision CI_Server
+config.vm.define "ci_server" do |ci_server|
+   ci_server.vm.network "public_network", bridge: "eno1", type: "dhcp"
+   ci_server.vm.provision :chef_solo do |chef|
+     chef.install = false
+     chef.cookbooks_path = "cookbooks"
+       chef.add_recipe "ci_server"
+       end
+  end
+
+  ##Deploy &  provision a client
+  config.vm.define "client" do |client|
+      client.vm.network "public_network", bridge: "eno1", type: "dhcp"
+      client.vm.provision :chef_solo do |chef|
+       chef.install = false
+       chef.cookbooks_path = "cookbooks"
+   chef.add_recipe "client"
+   end
+  end
+end
+]

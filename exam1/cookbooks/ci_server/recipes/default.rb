@@ -1,0 +1,5 @@
+include_recipe 'ci_server::install_tools'
+include_recipe 'ci_server::install_ngrok'
+include_recipe 'ci_server::install_python3'
+include_recipe 'ci_server::endpoint_config'
+include_recipe 'ci_server::endpoint_files'
