@@ -1,0 +1,21 @@
+swagger: '2.0'
+
+info:
+  title: User API
+  version: "0.1.0"
+
+paths:
+  /ci_server/updates:
+    post:
+      x-swagger-router-controller: gm_analytics
+      operationId: handlers.manage_pullrequest
+      summary: Manages the uptadates made trhough a pullrequest.
+      responses:
+        200:
+          description: Successful response.
+          schema:
+            type: object
+            properties:
+              command_return:
+                type: string
+description: User information

@@ -1,0 +1,10 @@
+[
+        {
+            "package_name": "tree",
+            "installation_commands": "tree"
+        },
+        {
+          "package_name": "nmap",
+          "installation_commands": "nmap"
+        }
+]

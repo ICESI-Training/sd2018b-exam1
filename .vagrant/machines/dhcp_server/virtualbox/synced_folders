@@ -1,0 +1,1 @@
+{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/distribuidos/Documents/afa/sd2018b-exam1","disabled":false,"__vagrantfile":true},"v-csc-a8abf0d63":{"id":"v-csc-a8abf0d63","guestpath":"/tmp/vagrant-chef/b26da901654cc5c21c9f804c45f0f7da/cookbooks","hostpath":"/home/distribuidos/Documents/afa/sd2018b-exam1/cookbooks","disabled":false,"__vagrantfile":true}}}
