@@ -139,6 +139,9 @@ Como se puede observar en la siguiente imagen, la carpeta /var/repo ya tiene los
 
 ![][8]
 
+### Problemas encontrados en la implementación
+
+Como todo buen proyecto, en este apartado se reunen los inconvenientes que se tuvieron que aforntar al momento de implementarlo. Uno de los primeros problemas al realizar la solución que se planteó fue aprovisionar correctamente con Chef. El orden en que se ejecutaban las recetas era un punto importante para el funcionamiento. Por otra parte, donde más se tuvo problemas fue en el manejo del formato Json del PULL REQUEST, ya que de este no se conocía mucho la estructura; su correcto conocimiento permitió poder manejarlo correctamente. Por último en el relato pero no en su aparición ni en importancia está el entendimiento del caso, esto es, entender la dinámica de un CI SERVER, así como el papel del Webhook y del endpoint en la solución del problema. Una vez afrontadas estas dificultades, el proyecto se pudo llevar a cabo con normalidad.
 
 
 
