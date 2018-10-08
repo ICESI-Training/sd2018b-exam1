@@ -106,19 +106,19 @@ Una vez corrido este servicio, se ve la IP generada temporalmente donde se expon
 
 Posterior, en el MIRROR SERVER debemos compartir nuestra clave de ssh al CI SERVER para permitir instalar los paquetes de manera remota 
 
-![][6]
+![][5]
 
-
-
+Con esta configuración hecha, configuramos nuestro WebHook en Github con el enlace público proporcionado por Ngrok para nuestro WebHook de la siguiente manera. Este debe recibir en forma de Json los PR.
 
 ![][2]
 
-
-
-
 ![][3]
+
+
+
+![][6]
 ![][4]
-![][5]
+
 
 ![][7]
 ![][8]
