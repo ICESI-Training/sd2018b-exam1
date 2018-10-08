@@ -124,7 +124,7 @@ Para comenzar a probar el endpoint lo corremos introduciendo las siguientes lín
 
 
 ![][7]
-![][8]
+
 
 
 
