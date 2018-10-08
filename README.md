@@ -22,7 +22,7 @@ En el siguiente informe, se presenta la implementación de una infraestructura d
 
 Para comenzar con el montaje de la solución, se construyó un entorno virtualizado Vagrant para las 4 máquinas virtuales en cuestión. En este proceso se debían configurar aspectos fundamentales de cada máquina, como lo son el nombre de identificación, los ajustes de red y la ruta de los cookbooks con los que se aprovisionan. A continuación se enseña la configuración del archivo donde se almacena esto: el VagrantFile
 
-```
+```ruby
 
 ##Vagrant configure
 Vagrant.configure("2") do |config|
