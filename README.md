@@ -16,9 +16,9 @@ En el siguiente informe, se presenta la implementación de una infraestructura d
 **Figura 1**. Arquitectura de la solución
 
 
-### Solución
+## Solución
 
-## Aprovisionamiento
+### Aprovisionamiento
 
 
 
