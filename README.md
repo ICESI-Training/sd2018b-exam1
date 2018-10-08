@@ -117,6 +117,14 @@ Con esta configuración hecha, configuramos nuestro WebHook en Github con el enl
 
 Para comenzar a probar el endpoint lo corremos introduciendo las siguientes líneas. En ellas se setean las variables de ambiente a un entorno de desarrollo.
 
+```bash
+export PYTHONPATH=$PYTHONPATH:`pwd`
+export FLASK_ENV=development
+connexion run gm_analytics/swagger/indexer.yaml --debug -p 8080
+```
+
+El resultado se muestra a continuación
+
 ![][6]
 
 
