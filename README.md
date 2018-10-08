@@ -103,6 +103,7 @@ En primer lugar, se corre el servicio Ngrok en el puerto 8080 de nuestro CI SERV
 
 Una vez corrido este servicio, se ve la IP generada temporalmente donde se expondrá nuestro endpoint. Aquí se mostrarán los códigos HTTP para cada solicitud entregada al endpoint.
 
+![][8]
 
 Posterior, en el MIRROR SERVER debemos compartir nuestra clave de ssh al CI SERVER para permitir instalar los paquetes de manera remota 
 
@@ -114,9 +115,11 @@ Con esta configuración hecha, configuramos nuestro WebHook en Github con el enl
 
 ![][3]
 
-
+Para comenzar a probar el endpoint lo corremos introduciendo las siguientes líneas. En ellas se setean las variables de ambiente a un entorno de desarrollo.
 
 ![][6]
+
+
 ![][4]
 
 
