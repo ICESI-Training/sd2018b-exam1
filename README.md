@@ -111,6 +111,7 @@ Una vez corrido este servicio, se ve la IP generada temporalmente donde se expon
 ![][5]
 ![][6]
 ![][7]
+![][8]
 
 
 
@@ -125,6 +126,7 @@ Una vez corrido este servicio, se ve la IP generada temporalmente donde se expon
 [5]: images/5.png
 [6]: images/6.png
 [7]: images/7.png
+[8]: images/8.png
 
 
 
