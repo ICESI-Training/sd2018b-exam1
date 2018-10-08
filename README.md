@@ -10,7 +10,7 @@
 
 
 ## Descripción
-En el siguiente informe, se presenta la implementación de una infraestructura de aprovisamiento automático. Esta solución tiene como objetivo principal el montaje de un servidor mirror que sirva como repositorio de los paquetes que necesitan los dispositivos del contexto local sin necesidad de acudir a internet y pasar por el cuello de botella que representa la salida de la red. Dicha labor será conseguida mediante el montaje de un servidor DHCP (DHCP SERVER) que provea de direcciones IP no estáticas a los equipos locales, un servidor mirror (MIRROR SERVER) que almacene la versión más reciente de los paquetes instalados en las máquinas, un servidor de integración continua (CI SERVER) que permita activar mediante eventos la instalación de las nuevas versiones de paquetes en el mirror y un cliente para testear la funcionalidad de los servicios anteriormente mencionados. Para la solución se emplea la herramienta para la creación y configuración de entornos virtualizados Vagrant, por lo que el proceso general de montaje y aprovisionamiento automático de máquinas se muestra implementado allí. En la figura 1 se muestra la arquitectura de la solución.
+En el siguiente informe, se presenta la implementación de una infraestructura de aprovisamiento automático. Esta solución tiene como objetivo principal el montaje de un servidor mirror que sirva como repositorio de los paquetes que necesitan los dispositivos del contexto local sin necesidad de acudir a internet y pasar por el cuello de botella que representa la salida de la red. Dicha labor será conseguida mediante el montaje de un servidor DHCP (DHCP SERVER) que provea de direcciones IP no estáticas a los equipos locales, un servidor mirror (MIRROR SERVER) que almacene la versión más reciente de los paquetes instalados en las máquinas, un servidor de integración continua (CI SERVER) que permita activar mediante eventos la instalación de las nuevas versiones de paquetes en el mirror y un cliente para testear la funcionalidad de los servicios anteriormente mencionados. Para la solución se emplea la herramienta para la creación y configuración de entornos virtualizados Vagrant, por lo que el proceso general de montaje y aprovisionamiento automático de máquinas se muestra implementado allí, así como se utilizan los cookbooks según. En la figura 1 se muestra la arquitectura de la solución.
 
 ![][1]
 **Figura 1**. Arquitectura de la solución
@@ -20,7 +20,7 @@ En el siguiente informe, se presenta la implementación de una infraestructura d
 
 ### Aprovisionamiento de las máquinas
 
-Para comenzar con el montaje de la solución, se construyó un entorno virtualizado Vagrant para las 4 máquinas virtuales en cuestión. En este proceso se debían configurar aspectos fundamentales de cada máquina, como lo son el nombre de identificación, los ajustes de red y la ruta de los cookbooks con los que se aprovisionan. A continuación se enseña la configuración del archivo donde se almacena esto: el VagrantFile
+Para comenzar con el montaje de la solución, se construyó un entorno virtualizado Vagrant para las 4 máquinas virtuales en cuestión. En este proceso se debían configurar aspectos fundamentales de cada máquina, como lo son el nombre de identificación, los ajustes de red y la ruta de los cookbooks con los que se aprovisionan. A continuación se enseña la configuración del archivo donde se almacena esto: el VagrantFile.
 
 ```ruby
 
@@ -74,8 +74,26 @@ end
 
 
 ```
+De lo anterior es importante remarcar que el MIRROR SERVER es el único diferente al DHCP SEVER que cuenta con una dirección IP estática; esto dado que el CI SERVER necesita saber constantemente a qué IP conectarse con el fin de instalar las actualizaciones de paquetes al momento de haber un PR con el archivo packages.json que contiene la lista de los mismos. A continuación, se procede a explicar a modo general el aprovisionamiento se automatizó.
+
+**DHCP SERVER**
+Para este servidor, se automatizó la instalación, configuración de el servicio dhcpd. Esto se consiguió mediante la instalación del servicio, la configuración del archivo donde se asigna el rango de IPs para otorgar y su posterior activación. Esto se consiguió mediante el uso de 3 recetas.
+
+**MIRROR SERVER**
+Para este caso se hicieron varios pasos. En primer lugar, se instaló y configuró el servicio httpd; con este se da paso a utilizar la utilidad de repolist. En segundo lugar, se instaló esta mencionada; con ella tenemos la posibilidad de manejar este servidor como un repositorio para los paquetes a instalar. En tercer lugar, se posicionó un archivo de packages.json, donde quedarían los paquetes instalados actualmente en el servidor mirror. Por último, se configuró el servicio ssh con el fin de que el CI SERVER pudiese conectarse a este e instalar los nuevos paquetes en el momento de un PULL REQUEST con paquetes nuevos.
+
+**CI SERVER**
+Este es el eje central del componente tan atractivo de integración continua. En este servidor la principal función es la de servir de endpoint, esto es, de ejecutar el método que permite que cada vez que se haga un PR al repositorio, los paquetes del Json de este se instalen en el MIRROR SERVER. Al este método estar desarrollado en Python, se requiere de la instalación de la versión 3.6 del mismo. Además de esto, se instalan las utilidades de connexion y Fabric las cuales nos permiten, respectivamente, correr y debugear el funcionamiento del endpoint y conectarnos a una máquina de manera remota. Además de esto, se instala la utilidad de Ngrok, la cual permite exponer nuestro servicio de endpoint en una IP pública para el WebHook. Para el entendimiento de este último, lo podemos definir como un aplicativo que ofrece Git que permite servir de trigger de eventos, esto es, escucha posibles eventos de un repositorio Git, tal como la realización de PRs, y envía la información de estos a un endpoint que se encuentre en una IP pública: aquí el papel del Ngrok.
 
 
+**CLIENT**
+Para este último usuario de prueba se configura en el archivo /etc/hosts el servidor mirror, así como ser realizan dos comandos con el fin de instalar los nuevos paquetes cada vez que inicia. Estos son los siguientes.
+
+
+```
+yum clean all
+yum update -y
+```
 
 [1]: images/01_arquitectura_solución.png
 
