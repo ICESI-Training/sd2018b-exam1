@@ -115,6 +115,10 @@ Con esta configuración hecha, configuramos nuestro WebHook en Github con el enl
 
 ![][3]
 
+Antes de realizar la prueba se valida que el directorio donde se encuentran los paquetes instalados del mirror está instalado antes de realizar el primer PR.
+
+![][9]
+
 Para comenzar a probar el endpoint lo corremos introduciendo las siguientes líneas. En ellas se setean las variables de ambiente a un entorno de desarrollo.
 
 ```bash
@@ -127,11 +131,13 @@ El resultado se muestra a continuación
 
 ![][6]
 
+Por último, se procede a realizar un PR de prueba, con tal de validar el funcionamiento de la solución de la siguiente manera.
 
 ![][4]
 
+Como se puede observar en la siguiente imagen, la carpeta /var/repo ya tiene los paquetes que se aprovisionaron desde el packages.json de prueba que había en la raíz del directorio. Este tenía, entre otros, los paquetes nmap y tree.
 
-
+![][8]
 
 
 
@@ -144,6 +150,9 @@ El resultado se muestra a continuación
 [5]: images/5.png
 [6]: images/6.png
 [7]: images/7.png
+[8]: images/8.png
+[9]: images/9.png
+
 
 
 
