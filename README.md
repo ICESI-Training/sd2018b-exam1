@@ -103,13 +103,23 @@ En primer lugar, se corre el servicio Ngrok en el puerto 8080 de nuestro CI SERV
 
 Una vez corrido este servicio, se ve la IP generada temporalmente donde se expondrá nuestro endpoint. Aquí se mostrarán los códigos HTTP para cada solicitud entregada al endpoint.
 
+
+Posterior, en el MIRROR SERVER debemos compartir nuestra clave de ssh al CI SERVER para permitir instalar los paquetes de manera remota 
+
+![][6]
+
+
+
+
 ![][2]
+
+
 
 
 ![][3]
 ![][4]
 ![][5]
-![][6]
+
 ![][7]
 ![][8]
 
