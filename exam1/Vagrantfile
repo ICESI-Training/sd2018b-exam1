@@ -1,0 +1,45 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.define :dhcp_server do |dhcp|
+  dhcp.vm.box = "centos1706_v0.2.0"
+  dhcp.vm.network "public_network", bridge: "eno1", ip:"192.168.180.10", netmask: "255.255.255.0"
+  dhcp.vm.provision :chef_solo do |chef|
+    chef.install = false
+    chef.cookbooks_path = "cookbooks"
+    chef.add_recipe "dhcpd"
+    end
+  end
+  config.vm.define :yum_server do |mirror|
+  mirror.vm.box = "centos1706_v0.2.0"
+  mirror.vm.network "public_network", bridge: "eno1", mac: "0800275236c8" ,type: "dhcp"
+  mirror.vm.provision :chef_solo do |chef|
+    chef.install = false
+    chef.cookbooks_path = "cookbooks"
+    chef.add_recipe "httpd"
+    chef.add_recipe "mirrorserver"
+    end
+  end
+  config.vm.define :ci_server do |ci|
+  ci.vm.box = "centos1706_v0.2.0"
+  ci.vm.network "public_network", bridge: "eno1", type: "dhcp"
+  ci.vm.provision :chef_solo do |chef|
+    chef.install = false
+    chef.cookbooks_path = "cookbooks"
+    chef.add_recipe "mirrorclient"
+    chef.add_recipe "ciserver"
+    end
+  end
+  config.vm.define :yum_client do |yclient|
+  yclient.vm.box = "centos1706_v0.2.0"
+  yclient.vm.network "public_network", bridge: "eno1", type: "dhcp"
+  yclient.vm.provision :chef_solo do |chef|
+    chef.install = false
+    chef.cookbooks_path = "cookbooks"
+    chef.add_recipe "mirrorclient"
+    end
+  end
+end
