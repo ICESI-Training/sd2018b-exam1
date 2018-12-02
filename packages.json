@@ -1,0 +1,8 @@
+[
+        {
+                "name": "nmap",
+                "version": "7.10-1",
+                "package_command": "nmap"
+        }
+
+]
